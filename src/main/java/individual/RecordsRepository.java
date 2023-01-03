@@ -10,19 +10,20 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class RecordsRepository {
 
+    private Path filePath = Path.of("records.json");
     private ObjectMapper jackson = new ObjectMapper();
 
     public void checkFile() throws IOException {
-        boolean fileExists = Files.exists(Path.of("records.json"));
+        boolean fileExists = Files.exists(filePath);
 
         if (!fileExists) {
-            Files.createFile(Path.of("records.json"));
-            Files.writeString(Path.of("records.json"), "[]");
+            Files.createFile(filePath);
+            Files.writeString(filePath, "[]");
         }
     }
 
     public List<Record> readFromFile() throws IOException {
-        String recordsJson = Files.readString(Path.of("records.json"));
+        String recordsJson = Files.readString(filePath);
 
         TypeReference<List<Record>> recordTypeReference = new TypeReference<>(){};
 
@@ -34,7 +35,7 @@ public class RecordsRepository {
     public void writeToFile(List<Record> records) throws IOException {
         String recordsJson = jackson.writeValueAsString(records);
 
-        Files.writeString(Path.of("records.json"), recordsJson);
+        Files.writeString(filePath, recordsJson);
     }
     
 }
